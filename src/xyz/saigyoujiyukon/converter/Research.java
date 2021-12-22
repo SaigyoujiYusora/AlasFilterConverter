@@ -89,7 +89,6 @@ class ConversionFormula{
         int tempNum;
         while (true) {
             //处理初始字符串
-//            input = input.replaceFirst("\t\r\n", "寄");
             if (input.contains("\t\r\n")) {
                 temp = input.substring(0, input.indexOf("\t\r\n"));
                 tempNum = 3;
@@ -99,7 +98,6 @@ class ConversionFormula{
             }else{
                 throw new UnknownInput();
             }
-//            temp = input.substring(0, input.indexOf("寄"));
             //彩=DR，金=PRY，舰装=Q，资金=G，魔方=H，基础=C，心智=H
 //            Research_Filter:
             System.out.println(temp);
