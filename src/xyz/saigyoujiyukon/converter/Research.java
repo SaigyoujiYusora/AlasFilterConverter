@@ -6,13 +6,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 
+
 public class Research {
     public static void main(String[] args) {
         new ResearchFrame();
     }
 }
 class ResearchFrame extends Frame{
-
     TextArea inputText,outputText;
 
     public ResearchFrame() {
@@ -31,8 +31,10 @@ class ResearchFrame extends Frame{
         topPanel.setBackground(Color.red);
 
         Panel mainPanel = new Panel();
-        TextArea inputText = new TextArea("",30,70,TextArea.SCROLLBARS_NONE);
-        TextArea outputText = new TextArea("",30,70,TextArea.SCROLLBARS_NONE);
+//        TextArea inputText = new TextArea("",30,70,TextArea.SCROLLBARS_NONE);
+        inputText = new TextArea("",30,70,TextArea.SCROLLBARS_NONE);
+//        TextArea outputText = new TextArea("",30,70,TextArea.SCROLLBARS_NONE);
+        outputText = new TextArea("",30,70,TextArea.SCROLLBARS_NONE);
         Label label = new Label("====>");
         Panel inputTextPanel = new Panel();
         Panel outputTextPanel = new Panel();
@@ -69,11 +71,68 @@ class ResearchFrame extends Frame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            String input = inputText.getText();
-            String output;
-            output = input;
+//            String input = inputText.getText();
+            //没写完↓
+//            ConversionFormula.convert(inputText.getText());
+            String output = ConversionFormula.convert(inputText.getText());
             outputText.setText(output);
-
         }
+    }
+}
+
+class UnknownInput extends NumberFormatException{
+
+}
+class ConversionFormula{
+//    String output = "";
+    public static String convert(String input){
+        StringBuilder output = new StringBuilder();
+        String temp;//截取出来匹配用的字符串
+        String inProcess = "";
+        int tempNum = 0;
+        while (true) {
+            //处理初始字符串
+//            input = input.replaceFirst("\t\r\n", "寄");
+            if (input.contains("\t\r\n")) {
+                temp = input.substring(0, input.indexOf("\t\r\n"));
+                tempNum = 3;
+            }else if (input.contains("\n")) {
+                temp = input.substring(0, input.indexOf("\n"));
+            }else{
+                throw new UnknownInput();
+            }
+//            temp = input.substring(0, input.indexOf("寄"));
+            //彩=DR，金=PRY，舰装=Q，资金=G，魔方=H，基础=C，心智=H
+//            Research_Filter:
+            if (temp.contains("舰装")){
+//                temp = temp.substring(4,temp.indexOf("h"));
+                inProcess = "Q" + "-" + temp.substring(4, temp.indexOf("h")) + " > ";
+            }else if (temp.contains("定向")){
+                if (temp.contains("彩")){
+                    inProcess = "DR" + "-" + temp.substring(4, temp.indexOf("h")) + " > ";
+                }else if (temp.contains("金")){
+                    inProcess = "PRY" + "-" + temp.substring(4, temp.indexOf("h")) + " > ";
+                }
+            }else if (temp.contains("资金")){
+                inProcess = "G" + "-" + temp.substring(4, temp.indexOf("h")) + " > ";
+            } else if (temp.contains("魔方") && temp.contains("心智")) {
+                inProcess = "H" + "-" + temp.substring(4, temp.indexOf("h")) + " > ";
+            } else if (temp.contains("基础")) {
+                inProcess = "C" + "-" + temp.substring(4, temp.indexOf("h")) + " > ";
+            }
+
+            output.append(inProcess);
+            //删除已处理的字符串
+            input = input.substring(temp.length() + tempNum);
+
+            if (input.length() <= 1) {
+                output.append("reset > shortest");
+                break;
+            }
+        }
+//        input = output;
+
+
+        return output.toString();
     }
 }
