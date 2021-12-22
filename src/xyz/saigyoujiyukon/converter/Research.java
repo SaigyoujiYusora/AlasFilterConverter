@@ -19,40 +19,40 @@ class ResearchFrame extends Frame{
         setTitle("科研过滤器转换");
         setSize(1270, 720);
         setResizable(false);
+        Font font = new Font("微软雅黑",Font.PLAIN,20);
 //        setLayout(new BorderLayout(1, 2));
-        Button button = new Button("转换");
-
+        Button button = new Button("Conversion");
 
         Panel topPanel = new Panel();
-        Label topTitle = new Label("科研过滤器转换");
+        Label topTitle = new Label("Research filter conversion");
+        topTitle.setFont(font);
+        button.setFont(font);
         add(topPanel,BorderLayout.NORTH);
         topPanel.setSize(20,30);
         topPanel.add(topTitle);
-        topPanel.setBackground(Color.red);
+        topPanel.setBackground(new Color(45, 203, 239));
 
         Panel mainPanel = new Panel();
 //        TextArea inputText = new TextArea("",30,70,TextArea.SCROLLBARS_NONE);
-        inputText = new TextArea("",30,70,TextArea.SCROLLBARS_NONE);
+        inputText = new TextArea("",13,33,TextArea.SCROLLBARS_NONE);
 //        TextArea outputText = new TextArea("",30,70,TextArea.SCROLLBARS_NONE);
-        outputText = new TextArea("",30,70,TextArea.SCROLLBARS_NONE);
-        Label label = new Label("====>");
+        outputText = new TextArea("",13,33,TextArea.SCROLLBARS_NONE);
         Panel inputTextPanel = new Panel();
         Panel outputTextPanel = new Panel();
         Panel downPanel = new Panel();
 
+        inputText.setFont(font);
+        outputText.setFont(font);
+
         add(mainPanel);
         mainPanel.setLayout(new GridLayout(1,2));
-//        panel.setLayout(new FlowLayout());
         inputTextPanel.add(inputText);
         outputTextPanel.add(outputText);
         mainPanel.add(inputTextPanel);
-//        panel.add(label);
-//        add(label,BorderLayout.CENTER);
         mainPanel.add(outputTextPanel);
         add(downPanel,BorderLayout.SOUTH);
         downPanel.setBounds(400,400,50,50);
         downPanel.add(button);
-//        downPanel.setSize(20,90);
         button.addActionListener(new ConversionProcess());
 
 
@@ -71,9 +71,6 @@ class ResearchFrame extends Frame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-//            String input = inputText.getText();
-            //没写完↓
-//            ConversionFormula.convert(inputText.getText());
             String output = ConversionFormula.convert(inputText.getText());
             outputText.setText(output);
         }
@@ -89,7 +86,7 @@ class ConversionFormula{
         StringBuilder output = new StringBuilder();
         String temp;//截取出来匹配用的字符串
         String inProcess = "";
-        int tempNum = 0;
+        int tempNum;
         while (true) {
             //处理初始字符串
 //            input = input.replaceFirst("\t\r\n", "寄");
@@ -97,13 +94,15 @@ class ConversionFormula{
                 temp = input.substring(0, input.indexOf("\t\r\n"));
                 tempNum = 3;
             }else if (input.contains("\n")) {
-                temp = input.substring(0, input.indexOf("\n"));
+                temp = input.substring(0, input.indexOf("\r\n"));
+                tempNum = 2;
             }else{
                 throw new UnknownInput();
             }
 //            temp = input.substring(0, input.indexOf("寄"));
             //彩=DR，金=PRY，舰装=Q，资金=G，魔方=H，基础=C，心智=H
 //            Research_Filter:
+            System.out.println(temp);
             if (temp.contains("舰装")){
 //                temp = temp.substring(4,temp.indexOf("h"));
                 inProcess = "Q" + "-" + temp.substring(4, temp.indexOf("h")) + " > ";
